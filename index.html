@@ -401,19 +401,20 @@
     .gallery-item:hover { border-color: var(--border-strong); }
 
     /* Bento-style spans */
-    .gi-1  { grid-column: span 5; grid-row: span 5; }
-    .gi-2  { grid-column: span 4; grid-row: span 3; }
-    .gi-3  { grid-column: span 3; grid-row: span 3; }
-    .gi-4  { grid-column: span 4; grid-row: span 2; }
-    .gi-5  { grid-column: span 3; grid-row: span 4; }
-    .gi-6  { grid-column: span 5; grid-row: span 4; }
-    .gi-7  { grid-column: span 4; grid-row: span 3; }
-    .gi-8  { grid-column: span 5; grid-row: span 3; }
-    .gi-9  { grid-column: span 3; grid-row: span 3; }
-    .gi-10 { grid-column: span 4; grid-row: span 3; }
-    .gi-11 { grid-column: span 4; grid-row: span 3; }
-    .gi-12 { grid-column: span 4; grid-row: span 3; }
-    .gi-13 { grid-column: span 4; grid-row: span 3; }
+    /* Landscape: wider than tall. Portrait: taller than wide. */
+    .gi-1  { grid-column: span 5; grid-row: span 3; } /* Foundry Drake — landscape */
+    .gi-2  { grid-column: span 3; grid-row: span 5; } /* Kaiju Picnic — portrait */
+    .gi-3  { grid-column: span 4; grid-row: span 3; } /* Croc Tank — landscape */
+    .gi-4  { grid-column: span 5; grid-row: span 3; } /* Handmade Potions — landscape */
+    .gi-5  { grid-column: span 4; grid-row: span 3; } /* Fishing for Trouble — landscape */
+    .gi-6  { grid-column: span 3; grid-row: span 3; } /* Commuters — portrait */
+    .gi-7  { grid-column: span 4; grid-row: span 3; } /* Chicken Ranch — landscape */
+    .gi-8  { grid-column: span 3; grid-row: span 5; } /* Gladys — landscape wide */
+    .gi-9  { grid-column: span 5; grid-row: span 3; } /* Grease Mill — landscape */
+    .gi-10 { grid-column: span 4; grid-row: span 3; } /* Growth — landscape */
+    .gi-11 { grid-column: span 3; grid-row: span 5; } /* Down Time — portrait */
+    .gi-12 { grid-column: span 3; grid-row: span 5; } /* Seasonal — portrait */
+    .gi-13 { grid-column: span 6; grid-row: span 3; } /* Wildlife — landscape */
 
     .gallery-item img {
       width: 100%; height: 100%;
