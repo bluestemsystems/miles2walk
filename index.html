@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miles Walker — Illustrator & World Builder</title>
+  <meta name="description" content="Fantasy illustration and worldbuilding. Creatures, cityscapes, and the weird places between." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0d0b08;
+      --ink-soft:  #1a1610;
+      --parchment: #f0e8d5;
+      --cream:     #ede3cc;
+      --gold:      #c9973a;
+      --gold-dim:  #8a6525;
+      --rust:      #8c3a1e;
+      --moss:      #2e4a2e;
+      --fog:       #b8a88a;
+      --fog-light: #d4c9b0;
+      --border:    rgba(201,151,58,0.25);
+      --border-strong: rgba(201,151,58,0.6);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── Noise texture overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.6;
+    }
+
+    /* ─── Typography ─── */
+    h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+    .display { font-family: 'Cinzel Decorative', serif; }
+    .mono { font-family: 'Space Mono', monospace; font-size: 0.78em; }
+
+    a { color: var(--gold); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--parchment); }
+
+    /* ─── Custom Cursor ─── */
+    body { cursor: none; }
+    #cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, opacity 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-trail {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 0.5px solid rgba(201,151,58,0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.15s ease, top 0.15s ease;
+    }
+
+    /* ─── Decorative HR ─── */
+    .rule {
+      display: flex; align-items: center; gap: 12px;
+      margin: 2rem 0;
+      color: var(--gold-dim);
+    }
+    .rule::before, .rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+    .rule-symbol { font-size: 1rem; opacity: 0.6; }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,11,8,0.95), transparent);
+      backdrop-filter: blur(0px);
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex; gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fog);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ─── Hero ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Radial glow behind hero text */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(201,151,58,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Animated corner ornaments */
+    .corner {
+      position: absolute;
+      width: 80px; height: 80px;
+      opacity: 0.4;
+    }
+    .corner svg { width: 100%; height: 100%; }
+    .corner-tl { top: 100px; left: 30px; }
+    .corner-tr { top: 100px; right: 30px; transform: scaleX(-1); }
+    .corner-bl { bottom: 40px; left: 30px; transform: scaleY(-1); }
+    .corner-br { bottom: 40px; right: 30px; transform: scale(-1); }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s 0.2s both;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 0.95;
+      color: var(--parchment);
+      margin-bottom: 0.4rem;
+      animation: fadeUp 1s 0.4s both;
+    }
+
+    .hero-title .accent {
+      color: var(--gold);
+      font-style: italic;
+      display: block;
+      font-family: 'IM Fell English', serif;
+      font-size: 0.55em;
+      margin-top: 0.3rem;
+      letter-spacing: 0.15em;
+    }
+
+    .hero-tagline {
+      margin-top: 2rem;
+      font-style: italic;
+      color: var(--fog);
+      font-size: 1.05rem;
+      max-width: 500px;
+      animation: fadeUp 1s 0.6s both;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 1s 0.8s both;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.8rem 2rem;
+      border: 1px solid;
+      transition: all 0.25s;
+      cursor: none;
+    }
+    .btn-primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--ink);
+    }
+    .btn-primary:hover {
+      background: var(--parchment);
+      border-color: var(--parchment);
+      color: var(--ink);
+    }
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--fog);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: fadeUp 1s 1.2s both;
+    }
+    .scroll-hint span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+
+    /* ─── Section base ─── */
+    section { padding: 6rem 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+
+    .section-header {
+      margin-bottom: 4rem;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--cream);
+    }
+
+    /* ─── About ─── */
+    #about {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-portrait {
+      position: relative;
+    }
+    .portrait-frame {
+      aspect-ratio: 3/4;
+      background: var(--ink);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .portrait-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,151,58,0.08), transparent 60%);
+    }
+    .portrait-placeholder {
+      text-align: center;
+      color: var(--gold-dim);
+      padding: 2rem;
+    }
+    .portrait-placeholder svg {
+      width: 80px; height: 80px;
+      opacity: 0.3;
+      margin-bottom: 1rem;
+    }
+    .portrait-placeholder p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      opacity: 0.7;
+    }
+    /* Corner pins */
+    .portrait-frame::after {
+      content: '✦';
+      position: absolute;
+      top: 10px; left: 10px;
+      color: var(--gold);
+      font-size: 0.7rem;
+      opacity: 0.5;
+    }
+
+    .about-content p {
+      color: var(--fog-light);
+      margin-bottom: 1.4rem;
+      font-size: 1.05rem;
+    }
+    .about-content p:first-of-type::first-letter {
+      font-size: 3rem;
+      font-family: 'Cinzel Decorative', serif;
+      float: left;
+      line-height: 0.8;
+      margin: 0.1em 0.1em 0 0;
+      color: var(--gold);
+    }
+
+    .about-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 2rem;
+    }
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      color: var(--fog);
+    }
+
+    /* ─── Gallery ─── */
+    #work {
+      background: var(--ink);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 80px;
+      gap: 3px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      background: var(--ink-soft);
+      border: 1px solid rgba(201,151,58,0.1);
+      transition: border-color 0.3s;
+    }
+    .gallery-item:hover { border-color: var(--border-strong); }
+
+    /* Bento-style spans */
+    .gi-1  { grid-column: span 5; grid-row: span 5; }
+    .gi-2  { grid-column: span 4; grid-row: span 3; }
+    .gi-3  { grid-column: span 3; grid-row: span 3; }
+    .gi-4  { grid-column: span 4; grid-row: span 2; }
+    .gi-5  { grid-column: span 3; grid-row: span 4; }
+    .gi-6  { grid-column: span 5; grid-row: span 4; }
+    .gi-7  { grid-column: span 4; grid-row: span 3; }
+    .gi-8  { grid-column: span 5; grid-row: span 3; }
+    .gi-9  { grid-column: span 3; grid-row: span 3; }
+    .gi-10 { grid-column: span 4; grid-row: span 3; }
+    .gi-11 { grid-column: span 4; grid-row: span 3; }
+    .gi-12 { grid-column: span 4; grid-row: span 3; }
+    .gi-13 { grid-column: span 4; grid-row: span 3; }
+
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease, filter 0.4s;
+      filter: saturate(0.85) brightness(0.9);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.04);
+      filter: saturate(1.05) brightness(1);
+    }
+
+    /* Placeholder art cards */
+    .art-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .art-placeholder .art-icon { font-size: 2rem; opacity: 0.2; }
+    .art-placeholder .art-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-dim);
+      opacity: 0.8;
+    }
+    .art-placeholder .art-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--gold-dim);
+      opacity: 0.4;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,11,8,0.9) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem 1.2rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-info { }
+    .gallery-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--parchment);
+      display: block;
+    }
+    .gallery-type {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Process / Services ─── */
+    #services {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      padding: 2.5rem 2rem;
+      background: var(--ink);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .service-card:hover { background: var(--ink-soft); }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+    .service-title {
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .service-desc {
+      color: var(--fog);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ─── Contact ─── */
+    #contact {
+      background: var(--ink);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-inner .section-title {
+      margin-bottom: 1.2rem;
+    }
+    .contact-inner p {
+      color: var(--fog);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .contact-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fog);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-link:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .email-display {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: var(--parchment);
+      letter-spacing: 0.06em;
+      margin-bottom: 2.5rem;
+      display: block;
+    }
+    .email-display:hover { color: var(--gold); }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-dim);
+    }
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--fog);
+      opacity: 0.5;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.05); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-portrait { max-width: 280px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+      .gi-1, .gi-2, .gi-3, .gi-4, .gi-5,
+      .gi-6, .gi-7, .gi-8, .gi-9 {
+        grid-column: span 1; grid-row: span 1;
+      }
+      .corner { display: none; }
+      #cursor, #cursor-trail { display: none; }
+      body { cursor: default; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-logo">Miles Walker</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <!-- Corner ornaments -->
+    <div class="corner corner-tl">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 40 M5 5 L40 5" stroke="#c9973a" stroke-width="0.8"/>
+        <path d="M5 5 L20 20" stroke="#c9973a" stroke-width="0.5" opacity="0.5"/>
+        <circle cx="5" cy="5" r="2.5" fill="#c9973a" opacity="0.7"/>
+        <circle cx="40" cy="5" r="1" fill="#c9973a" opacity="0.4"/>
+        <circle cx="5" cy="40" r="1" fill="#c9973a" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="corner corner-tr">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 40 M5 5 L40 5" stroke="#c9973a" stroke-width="0.8"/>
+        <path d="M5 5 L20 20" stroke="#c9973a" stroke-width="0.5" opacity="0.5"/>
+        <circle cx="5" cy="5" r="2.5" fill="#c9973a" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="corner corner-bl">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 40 M5 5 L40 5" stroke="#c9973a" stroke-width="0.8"/>
+        <circle cx="5" cy="5" r="2.5" fill="#c9973a" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="corner corner-br">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 40 M5 5 L40 5" stroke="#c9973a" stroke-width="0.8"/>
+        <circle cx="5" cy="5" r="2.5" fill="#c9973a" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <p class="hero-eyebrow">Fantasy Illustration &amp; Worldbuilding</p>
+
+    <h1 class="hero-title display">
+      Miles Walker
+      <span class="accent">Where the Familiar Turns Strange</span>
+    </h1>
+
+    <p class="hero-tagline">
+      Creatures, cityscapes, and the weird places in between.
+      Grounded in Texas, wandering somewhere else entirely.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View the Work</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-portrait reveal">
+          <div class="portrait-frame">
+            <!-- Replace src with Miles' actual photo -->
+            <!-- <img src="images/miles-portrait.jpg" alt="Miles Walker" /> -->
+            <div class="portrait-placeholder">
+              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="28" r="16" stroke="#c9973a" stroke-width="1.5"/>
+                <path d="M12 70 C12 52 68 52 68 70" stroke="#c9973a" stroke-width="1.5"/>
+              </svg>
+              <p>artist photo<br/>goes here</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-content reveal" style="transition-delay: 0.15s;">
+          <div class="section-header">
+            <p class="section-label">The Artist</p>
+            <h2 class="section-title">Miles Walker</h2>
+          </div>
+
+          <p>
+            An illustrator and world builder based in San Antonio, Texas. My work lives at
+            the intersection of the real and the fantastical — familiar landscapes transformed
+            by creatures that shouldn't exist, cities that hum with quiet magic, and the
+            strange logic of places that never were.
+          </p>
+          <p>
+            I build worlds that feel lived-in. Every piece is a window into the same
+            sprawling universe — one where kaiju sun themselves by the River Walk, drakes
+            haunt the foundry district, and potions are sold out of hand-painted roadside
+            shacks on the way out of town.
+          </p>
+          <p>
+            Available for commissions, licensing, and collaborative projects. Especially
+            interested in TTRPG illustration, cover art, and projects with deep lore to dig into.
+          </p>
+
+          <div class="about-tags">
+            <span class="tag">Fantasy Illustration</span>
+            <span class="tag">Creature Design</span>
+            <span class="tag">World Building</span>
+            <span class="tag">TTRPG Art</span>
+            <span class="tag">Concept Art</span>
+            <span class="tag">San Antonio, TX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work / Gallery -->
+  <section id="work">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Portfolio</p>
+        <h2 class="section-title">The Work</h2>
+      </div>
+
+      <div class="gallery-grid reveal" style="transition-delay: 0.1s;">
+
+        <div class="gallery-item gi-1">
+          <img src="images/Foundry_Drake.png" alt="Foundry Drake" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Foundry Drake</span>
+              <span class="gallery-type">Creature Design</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-2">
+          <img src="images/Kaiju Picnic.png" alt="Kaiju Picnic" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Kaiju Picnic</span>
+              <span class="gallery-type">Environment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-3">
+          <img src="images/Croc_Tank.png" alt="Croc Tank" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Croc Tank</span>
+              <span class="gallery-type">Urban Fantasy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-4">
+          <img src="images/Handmade_Potions.png" alt="Handmade Potions" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Handmade Potions</span>
+              <span class="gallery-type">Atmospheric</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-5">
+          <img src="images/Fishing_For_Trouble_.png" alt="Fishing for Trouble" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Fishing for Trouble</span>
+              <span class="gallery-type">Environment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-6">
+          <img src="images/Commuters.png" alt="Commuters" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Commuters</span>
+              <span class="gallery-type">Urban Fantasy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-7">
+          <img src="images/Chicken_Ranch.png" alt="Chicken Ranch" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Chicken Ranch</span>
+              <span class="gallery-type">Texas Gothic</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-8">
+          <img src="images/Gladys.png" alt="Gladys" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Gladys</span>
+              <span class="gallery-type">Character</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-9">
+          <img src="images/Grease Mill.png" alt="Grease Mill" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Grease Mill</span>
+              <span class="gallery-type">Environment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-10">
+          <img src="images/Growth.png" alt="Growth" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Growth</span>
+              <span class="gallery-type">Creature Design</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-11">
+          <img src="images/Down Time.png" alt="Down Time" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Down Time</span>
+              <span class="gallery-type">Character</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-12">
+          <img src="images/Seasonal.png" alt="Seasonal" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Seasonal</span>
+              <span class="gallery-type">Atmospheric</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item gi-13">
+          <img src="images/Wildlife.png" alt="Wildlife" />
+          <div class="gallery-overlay">
+            <div class="gallery-info">
+              <span class="gallery-title">Wildlife</span>
+              <span class="gallery-type">Creature Design</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">What I Do</p>
+        <h2 class="section-title">Available For</h2>
+      </div>
+
+      <div class="services-grid reveal" style="transition-delay: 0.1s;">
+        <div class="service-card">
+          <div class="service-num">I</div>
+          <h3 class="service-title">Commission Work</h3>
+          <p class="service-desc">
+            Custom illustrations built around your world, characters, or creatures.
+            From quick character sketches to fully realized environments.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">II</div>
+          <h3 class="service-title">TTRPG &amp; Game Art</h3>
+          <p class="service-desc">
+            Creature design, monster manuals, campaign art, world maps, and
+            the visual language that makes a setting feel real.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">III</div>
+          <h3 class="service-title">Book &amp; Cover Art</h3>
+          <p class="service-desc">
+            Cover illustration and interior art for novels, novellas,
+            anthologies, and zines. Speculative, fantasy, and horror especially welcome.
+          </p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">IV</div>
+          <h3 class="service-title">Licensing</h3>
+          <p class="service-desc">
+            Existing works available for licensing. Prints, merchandise, digital use.
+            Let's talk about what fits your project.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <div class="section-header">
+          <p class="section-label">Say Hello</p>
+          <h2 class="section-title">Let's Make Something</h2>
+        </div>
+
+        <p>
+          Have a project in mind, want to license something, or just want
+          to talk about weird creatures and the places they live?
+          Drop a line.
+        </p>
+
+        <!-- Replace with Miles' actual email -->
+        <a href="mailto:mileswalkerart@gmail.com" class="email-display">mileswalkerart@gmail.com</a>
+
+        <div class="contact-links">
+          <!-- Update these hrefs with Miles' actual profiles -->
+          <a href="#" class="contact-link">Instagram</a>
+          <a href="#" class="contact-link">ArtStation</a>
+          <a href="#" class="contact-link">Redbubble</a>
+          <a href="#" class="contact-link">Patreon</a>
+        </div>
+
+        <div class="rule"><span class="rule-symbol">✦</span></div>
+
+        <p class="mono" style="color: var(--gold-dim); font-size: 0.65rem; letter-spacing: 0.2em;">
+          BASED IN SAN ANTONIO, TEXAS &nbsp;·&nbsp; AVAILABLE WORLDWIDE
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">Miles Walker</div>
+    <div class="footer-copy">© 2026 Miles Walker. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // ─── Custom cursor ───
+    const cursor = document.getElementById('cursor');
+    const trail  = document.getElementById('cursor-trail');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      trail.style.left  = e.clientX + 'px';
+      trail.style.top   = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .gallery-item, .service-card, .btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+        cursor.style.borderColor = 'var(--parchment)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursor.style.borderColor = 'var(--gold)';
+      });
+    });
+
+    // ─── Scroll reveal ───
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ─── Stagger gallery items ───
+    document.querySelectorAll('.gallery-item').forEach((el, i) => {
+      el.style.animationDelay = (i * 0.04) + 's';
+    });
+  </script>
+</body>
+</html>
