@@ -311,6 +311,12 @@
       align-items: center;
       justify-content: center;
     }
+    .portrait-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
     .portrait-frame::before {
       content: '';
       position: absolute;
@@ -722,15 +728,7 @@
       <div class="about-grid">
         <div class="about-portrait reveal">
           <div class="portrait-frame">
-            <!-- Replace src with Miles' actual photo -->
-            <!-- <img src="images/miles-portrait.jpg" alt="Miles Walker" /> -->
-            <div class="portrait-placeholder">
-              <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="40" cy="28" r="16" stroke="#c9973a" stroke-width="1.5"/>
-                <path d="M12 70 C12 52 68 52 68 70" stroke="#c9973a" stroke-width="1.5"/>
-              </svg>
-              <p>artist photo<br/>goes here</p>
-            </div>
+            <img src="MilesWalker.jpeg" alt="Miles Walker" />
           </div>
         </div>
 
@@ -781,7 +779,7 @@
       <div class="gallery-grid reveal" style="transition-delay: 0.1s;">
 
         <div class="gallery-item gi-1">
-          <img src="images/Foundry_Drake.png" alt="Foundry Drake" />
+          <img src="Images/Foundry_Drake.png" alt="Foundry Drake" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Foundry Drake</span>
@@ -791,7 +789,7 @@
         </div>
 
         <div class="gallery-item gi-2">
-          <img src="images/Kaiju Picnic.png" alt="Kaiju Picnic" />
+          <img src="Images/Kaiju Picnic.png" alt="Kaiju Picnic" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Kaiju Picnic</span>
@@ -801,7 +799,7 @@
         </div>
 
         <div class="gallery-item gi-3">
-          <img src="images/Croc_Tank.png" alt="Croc Tank" />
+          <img src="Images/Croc_Tank.png" alt="Croc Tank" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Croc Tank</span>
@@ -811,7 +809,7 @@
         </div>
 
         <div class="gallery-item gi-4">
-          <img src="images/Handmade_Potions.png" alt="Handmade Potions" />
+          <img src="Images/Handmade_Potions.png" alt="Handmade Potions" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Handmade Potions</span>
@@ -821,7 +819,7 @@
         </div>
 
         <div class="gallery-item gi-5">
-          <img src="images/Fishing_For_Trouble_.png" alt="Fishing for Trouble" />
+          <img src="Images/Fishing_For_Trouble_.png" alt="Fishing for Trouble" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Fishing for Trouble</span>
@@ -831,7 +829,7 @@
         </div>
 
         <div class="gallery-item gi-6">
-          <img src="images/Commuters.png" alt="Commuters" />
+          <img src="Images/Commuters.png" alt="Commuters" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Commuters</span>
@@ -841,7 +839,7 @@
         </div>
 
         <div class="gallery-item gi-7">
-          <img src="images/Chicken_Ranch.png" alt="Chicken Ranch" />
+          <img src="Images/Chicken_Ranch.png" alt="Chicken Ranch" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Chicken Ranch</span>
@@ -851,7 +849,7 @@
         </div>
 
         <div class="gallery-item gi-8">
-          <img src="images/Gladys.png" alt="Gladys" />
+          <img src="Images/Gladys.png" alt="Gladys" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Gladys</span>
@@ -861,7 +859,7 @@
         </div>
 
         <div class="gallery-item gi-9">
-          <img src="images/Grease Mill.png" alt="Grease Mill" />
+          <img src="Images/Grease Mill.png" alt="Grease Mill" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Grease Mill</span>
@@ -871,7 +869,7 @@
         </div>
 
         <div class="gallery-item gi-10">
-          <img src="images/Growth.png" alt="Growth" />
+          <img src="Images/Growth.png" alt="Growth" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Growth</span>
@@ -881,7 +879,7 @@
         </div>
 
         <div class="gallery-item gi-11">
-          <img src="images/Down Time.png" alt="Down Time" />
+          <img src="Images/Down Time.png" alt="Down Time" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Down Time</span>
@@ -891,7 +889,7 @@
         </div>
 
         <div class="gallery-item gi-12">
-          <img src="images/Seasonal.png" alt="Seasonal" />
+          <img src="Images/Seasonal.png" alt="Seasonal" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Seasonal</span>
@@ -901,7 +899,7 @@
         </div>
 
         <div class="gallery-item gi-13">
-          <img src="images/Wildlife.png" alt="Wildlife" />
+          <img src="Images/Wildlife.png" alt="Wildlife" />
           <div class="gallery-overlay">
             <div class="gallery-info">
               <span class="gallery-title">Wildlife</span>
