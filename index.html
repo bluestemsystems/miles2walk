@@ -725,7 +725,7 @@
       trail.style.left  = e.clientX + 'px';
       trail.style.top   = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .gallery-item, .service-card, .btn').forEach(el => {
+    document.querySelectorAll('a, button, .service-card, .btn').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.transform = 'translate(-50%, -50%) scale(2)';
         cursor.style.borderColor = 'var(--parchment)';
@@ -746,11 +746,6 @@
       });
     }, { threshold: 0.12 });
     reveals.forEach(el => observer.observe(el));
-
-    // ─── Stagger gallery items ───
-    document.querySelectorAll('.gallery-item').forEach((el, i) => {
-      el.style.animationDelay = (i * 0.04) + 's';
-    });
   </script>
 </body>
 </html>
