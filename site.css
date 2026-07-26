@@ -352,13 +352,6 @@ footer {
   .about-portrait {
     max-width: 280px;
   }
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px;
-  }
-  .gi-1, .gi-2, .gi-3, .gi-4, .gi-5,
-      .gi-6, .gi-7, .gi-8, .gi-9 {
-    grid-column: span 1; grid-row: span 1;
-  }
   .corner {
     display: none;
   }
