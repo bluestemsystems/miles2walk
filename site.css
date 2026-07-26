@@ -141,6 +141,15 @@ nav {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.nav-mark {
+  height: 26px;
+  width: auto;
+  display: block;
+  flex: 0 0 auto;
 }
 
 .nav-links {
@@ -304,6 +313,16 @@ footer {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   color: var(--gold-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.footer-mark {
+  height: 22px;
+  width: auto;
+  display: block;
+  flex: 0 0 auto;
+  opacity: 0.75;
 }
 
 .footer-copy {

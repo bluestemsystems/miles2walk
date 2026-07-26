@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Miles Walker — Illustrator & World Builder</title>
   <meta name="description" content="Fantasy illustration and worldbuilding. Creatures, cityscapes, and the weird places between." />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -20,7 +22,9 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 6rem 2rem 4rem;
+      /* Bottom padding reserves room for the absolutely-positioned .scroll-hint
+         (sits at bottom:2.5rem, ~68px tall) so centred content can't overlap it. */
+      padding: 6rem 2rem 9rem;
       position: relative;
       overflow: hidden;
     }
@@ -110,11 +114,14 @@
 
     /* Scroll indicator */
 
+    /* Centred by spanning the full width + flex, NOT by translateX(-50%) —
+       the fadeUp animation sets its own transform and would cancel it out. */
+
     .scroll-hint {
       position: absolute;
       bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -154,6 +161,20 @@
 
     .about-portrait {
       position: relative;
+    }
+
+    /* Sibling of .portrait-frame, not a child — the frame clips overflow.
+       Drop-shadow keeps the gold readable over the photo. */
+
+    .portrait-mark {
+      position: absolute;
+      bottom: -30px;
+      left: -30px;
+      height: 140px;
+      width: auto;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 3px 10px rgba(13,11,8,0.9));
     }
 
     .portrait-frame {
@@ -314,6 +335,14 @@
       #lightgallery {
         columns: 2;
       }
+
+      /* Portrait caps at 280px wide here, so scale the mark with it. */
+
+      .portrait-mark {
+        height: 100px;
+        bottom: -22px;
+        left: -22px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -393,7 +422,10 @@
 
   <!-- Navigation -->
   <nav>
-    <div class="nav-logo">Miles Walker</div>
+    <div class="nav-logo">
+      <img src="logo.webp" alt="" class="nav-mark" width="163" height="260" />
+      <span>Miles Walker</span>
+    </div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#work">Work</a></li>
@@ -466,6 +498,7 @@
           <div class="portrait-frame">
             <img src="MilesWalker.webp" alt="Miles Walker" width="675" height="900" loading="lazy" decoding="async" />
           </div>
+          <img src="logo.webp" alt="" class="portrait-mark" width="163" height="260" />
         </div>
 
         <div class="about-content reveal" style="transition-delay: 0.15s;">
@@ -702,7 +735,10 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-brand">Miles Walker</div>
+    <div class="footer-brand">
+      <img src="logo.webp" alt="" class="footer-mark" width="163" height="260" />
+      <span>Miles Walker</span>
+    </div>
     <div class="footer-copy">© 2026 Miles Walker. All rights reserved.</div>
   </footer>
 
