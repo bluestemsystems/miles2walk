@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miles2walk.com — Colour Palette</title>
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+<style>
+  :root {
+    /* The site's own palette — this sheet is rendered in the system it documents. */
+    --ink:        #0d0b08;
+    --ink-soft:   #1a1610;
+    --parchment:  #f0e8d5;
+    --cream:      #ede3cc;
+    --gold:       #c9973a;
+    --gold-dim:   #8a6525;
+    --rust:       #8c3a1e;
+    --moss:       #2e4a2e;
+    --fog:        #b8a88a;
+    --fog-light:  #d4c9b0;
+    --border:     rgba(201,151,58,0.25);
+    --border-strong: rgba(201,151,58,0.6);
+
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --mono:  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+    --measure: 62ch;
+    --gutter: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  /* Single-theme by intent: every value here is specified against a near-black
+     ground. Re-rendering the sheet on white would misstate how the colours behave. */
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(3rem, 9vw, 6rem) var(--gutter) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3.5rem, 8vw, 5.5rem);
+  }
+
+  /* ── Type scale ── */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin: 0;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    line-height: 1.05;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+    margin: 0.6rem 0 0;
+    color: var(--parchment);
+  }
+  h2 {
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--cream);
+  }
+  .lede {
+    max-width: var(--measure);
+    color: var(--fog);
+    margin: 1.5rem 0 0;
+  }
+  .note {
+    max-width: var(--measure);
+    color: var(--fog);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  header .meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--gold-dim);
+    margin: 1.75rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  section { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .sec-head { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  /* ── Ground bands ── */
+  .grounds { display: grid; gap: 1px; border: 1px solid var(--border); }
+  @media (min-width: 700px) { .grounds { grid-template-columns: 1fr 1fr; } }
+
+  .ground {
+    padding: clamp(2rem, 5vw, 3.25rem) 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-height: 190px;
+    justify-content: flex-end;
+  }
+  .ground--ink { background: var(--ink); }
+  .ground--soft { background: var(--ink-soft); }
+
+  .tok {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+  }
+  .hex {
+    font-family: var(--mono);
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    color: var(--parchment);
+  }
+  .use { color: var(--fog); font-size: 0.9rem; max-width: 34ch; }
+
+  /* ── Text-colour rows: the colour rendered as what it actually is ── */
+  .rows { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); }
+
+  .row {
+    background: var(--ink-soft);
+    padding: 1.4rem 1.6rem;
+    display: grid;
+    gap: 0.35rem 1.5rem;
+    grid-template-columns: 1fr;
+    align-items: baseline;
+  }
+  @media (min-width: 760px) {
+    .row {
+      grid-template-columns: 10.5rem 6.5rem 1fr auto;
+      align-items: center;
+      padding: 1.2rem 1.6rem;
+    }
+  }
+
+  .sample { font-size: 1.02rem; }
+  .row .use { font-size: 0.85rem; }
+
+  /* Contrast pills — state encoded in form, not just number */
+  .pill {
+    justify-self: start;
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.6rem;
+    border: 1px solid;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .pill--aaa  { color: var(--fog-light); border-color: var(--border); }
+  .pill--aa   { color: var(--gold); border-color: var(--border-strong); }
+  .pill--fail { color: #c8734f; border-color: rgba(200,115,79,0.45); }
+
+  /* ── Accent block ── */
+  .accent {
+    display: grid;
+    gap: 1px;
+    border: 1px solid var(--border);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 700px) { .accent { grid-template-columns: 1.15fr 1fr; } }
+
+  .accent-chip {
+    background: var(--gold);
+    color: var(--ink);
+    padding: clamp(2.25rem, 5vw, 3.25rem) 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    justify-content: flex-end;
+    min-height: 210px;
+  }
+  .accent-chip .tok { color: rgba(13,11,8,0.62); }
+  .accent-chip .hex { color: var(--ink); font-size: 1.5rem; }
+  .accent-chip .use { color: rgba(13,11,8,0.72); max-width: 30ch; }
+
+  .accent-side {
+    background: var(--ink-soft);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    justify-content: center;
+  }
+  .dim-swatch {
+    height: 46px;
+    background: var(--gold-dim);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Border demonstration ── */
+  .borders { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .borders { grid-template-columns: 1fr 1fr; } }
+
+  .bdemo { padding: 1.6rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  .bdemo--ink { background: var(--ink); border: 1px solid var(--border); }
+  .bdemo--soft { background: var(--ink-soft); border: 1px solid var(--border); }
+
+  .bdemo-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .line { height: 0; border-top: 1px solid var(--border); }
+  .line--strong { border-top: 1px solid var(--border-strong); }
+  .line-note {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--fog);
+    letter-spacing: 0.05em;
+  }
+  .line-note b { color: var(--parchment); font-weight: 400; }
+
+  /* ── Unused pair ── */
+  .unused { display: grid; gap: 1px; border: 1px solid var(--border); grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .unused { grid-template-columns: 1fr 1fr; } }
+  .unused-cell {
+    background: var(--ink-soft);
+    padding: 1.6rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+  .unused-chip {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+  }
+  .chip--rust { background: var(--rust); }
+  .chip--moss { background: var(--moss); }
+  .unused-body { display: flex; flex-direction: column; gap: 0.25rem; }
+
+  /* ── Token block ── */
+  .tokens-wrap { border: 1px solid var(--border); background: var(--ink-soft); }
+  .tokens-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .tokens-bar span {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  button {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.95rem;
+    background: transparent;
+    color: var(--fog);
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  button:hover { color: var(--gold); border-color: var(--gold); }
+  button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  pre {
+    margin: 0;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.85;
+    color: var(--fog-light);
+    font-variant-numeric: tabular-nums;
+  }
+  pre .p { color: var(--gold); }
+  pre .v { color: var(--parchment); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  footer p {
+    margin: 0;
+    max-width: var(--measure);
+    font-size: 0.86rem;
+    color: var(--fog);
+    opacity: 0.85;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header>
+    <p class="eyebrow">miles2walk.com</p>
+    <h1>Colour Palette</h1>
+    <p class="lede">
+      Warm near-black ground, parchment text, a single gold accent — and every
+      border built from that same gold at reduced opacity. No true black, no
+      true white, no grey anywhere in the system.
+    </p>
+    <p class="meta">SOURCE OF TRUTH — <code>:root</code> IN index.html AND shop.html</p>
+  </header>
+
+  <!-- Grounds -->
+  <section>
+    <div class="sec-head">
+      <h2>Grounds</h2>
+      <p class="note">Two backgrounds alternate down the page to separate sections. Both are warm — brown-biased rather than neutral.</p>
+    </div>
+    <div class="grounds">
+      <div class="ground ground--ink">
+        <p class="tok">--ink</p>
+        <p class="hex">#0d0b08</p>
+        <p class="use">Page background. The default ground everywhere.</p>
+      </div>
+      <div class="ground ground--soft">
+        <p class="tok">--ink-soft</p>
+        <p class="hex">#1a1610</p>
+        <p class="use">Alternating bands — About, Services, Formats, Catalog, Merch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Text colours -->
+  <section>
+    <div class="sec-head">
+      <h2>Text</h2>
+      <p class="note">
+        Each row is set in the colour it describes. Contrast is measured against
+        <span class="tok">--ink</span>; ratios on <span class="tok">--ink-soft</span> run roughly 8% lower.
+      </p>
+    </div>
+    <div class="rows">
+      <div class="row">
+        <span class="tok">--parchment</span>
+        <span class="hex" style="font-size:0.9rem">#f0e8d5</span>
+        <span class="sample" style="color:var(--parchment)">Body copy and the hero title</span>
+        <span class="pill pill--aaa">16.11 · AAA</span>
+      </div>
+      <div class="row">
+        <span class="tok">--cream</span>
+        <span class="hex" style="font-size:0.9rem">#ede3cc</span>
+        <span class="sample" style="color:var(--cream)">Section titles and card headings</span>
+        <span class="pill pill--aaa">15.41 · AAA</span>
+      </div>
+      <div class="row">
+        <span class="tok">--fog-light</span>
+        <span class="hex" style="font-size:0.9rem">#d4c9b0</span>
+        <span class="sample" style="color:var(--fog-light)">Note blocks — used once per page</span>
+        <span class="pill pill--aaa">11.96 · AAA</span>
+      </div>
+      <div class="row">
+        <span class="tok">--fog</span>
+        <span class="hex" style="font-size:0.9rem">#b8a88a</span>
+        <span class="sample" style="color:var(--fog)">Secondary text, nav links, descriptions</span>
+        <span class="pill pill--aaa">8.43 · AAA</span>
+      </div>
+      <div class="row">
+        <span class="tok">--gold-dim</span>
+        <span class="hex" style="font-size:0.9rem">#8a6525</span>
+        <span class="sample" style="color:var(--gold-dim)">Eyebrow labels, footer brand, rules</span>
+        <span class="pill pill--aa">3.71 · AA LARGE</span>
+      </div>
+    </div>
+    <p class="note">
+      One thing to watch: <span class="tok">--gold-dim</span> clears AA for large
+      text only, but it's currently used on eyebrow labels set at 0.65rem. Those
+      sit below the AA threshold for body-size text. Fine for decorative labels
+      whose words repeat elsewhere; worth nudging brighter if any of them ever
+      carry information you can't get another way.
+    </p>
+  </section>
+
+  <!-- Accent -->
+  <section>
+    <div class="sec-head">
+      <h2>Accent</h2>
+      <p class="note">One accent, used everywhere it matters. The most-referenced token in the stylesheet — 18–19 uses per page.</p>
+    </div>
+    <div class="accent">
+      <div class="accent-chip">
+        <p class="tok">--gold</p>
+        <p class="hex">#c9973a</p>
+        <p class="use">Links, hovers, rules, ornaments, primary buttons, the numerals on service cards.</p>
+      </div>
+      <div class="accent-side">
+        <div class="dim-swatch"></div>
+        <div>
+          <p class="tok">--gold-dim</p>
+          <p class="hex" style="font-size:0.95rem">#8a6525</p>
+          <p class="use" style="margin-top:0.35rem">
+            The muted register of the same hue — labels and quiet ornament,
+            where full gold would shout.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Borders -->
+  <section>
+    <div class="sec-head">
+      <h2>Borders</h2>
+      <p class="note">
+        The detail that makes the site feel warm: borders aren't grey. They're
+        <span class="tok">--gold</span> at 25% and 60% alpha, so they pick up
+        whatever sits behind them.
+      </p>
+    </div>
+    <div class="borders">
+      <div class="bdemo bdemo--ink">
+        <p class="bdemo-label">Over --ink</p>
+        <div class="line"></div>
+        <p class="line-note">--border · 25% → composites to <b>#3c2e14</b></p>
+        <div class="line line--strong"></div>
+        <p class="line-note">--border-strong · 60% → composites to <b>#7e5f26</b></p>
+      </div>
+      <div class="bdemo bdemo--soft">
+        <p class="bdemo-label">Over --ink-soft</p>
+        <div class="line"></div>
+        <p class="line-note">--border · 25% → composites to <b>#46361a</b></p>
+        <div class="line line--strong"></div>
+        <p class="line-note">--border-strong · 60% → composites to <b>#836329</b></p>
+      </div>
+    </div>
+    <p class="note">
+      <span class="tok">--border</span> is the standard hairline — section
+      dividers, card edges, grid lines. <span class="tok">--border-strong</span>
+      is reserved for hover states and ghost-button outlines.
+    </p>
+  </section>
+
+  <!-- Unused -->
+  <section>
+    <div class="sec-head">
+      <h2>Declared but unused</h2>
+      <p class="note">Two colours sit in <code>:root</code> with zero references on either page. Presumably intended as secondary accents and never wired up.</p>
+    </div>
+    <div class="unused">
+      <div class="unused-cell">
+        <div class="unused-chip chip--rust"></div>
+        <div class="unused-body">
+          <p class="tok">--rust</p>
+          <p class="hex" style="font-size:0.95rem">#8c3a1e</p>
+          <p class="use">Burnt orange-red. 0 uses.</p>
+        </div>
+      </div>
+      <div class="unused-cell">
+        <div class="unused-chip chip--moss"></div>
+        <div class="unused-body">
+          <p class="tok">--moss</p>
+          <p class="hex" style="font-size:0.95rem">#2e4a2e</p>
+          <p class="use">Deep desaturated green. 0 uses.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Both are too dark to carry text on these grounds (2.56 and 2.00 against
+      <span class="tok">--ink</span>), so they'd work as fills or badges rather
+      than type — a sold-out tag, a sale flag, category coding on the shop page.
+      They're already in the right key if a second accent is ever needed.
+    </p>
+  </section>
+
+  <!-- Tokens -->
+  <section>
+    <div class="tokens-wrap">
+      <div class="tokens-bar">
+        <span>The tokens</span>
+        <button id="copy" type="button">Copy</button>
+      </div>
+<pre id="tokens">:root {
+  <span class="p">--ink</span>:           <span class="v">#0d0b08</span>;
+  <span class="p">--ink-soft</span>:      <span class="v">#1a1610</span>;
+  <span class="p">--parchment</span>:     <span class="v">#f0e8d5</span>;
+  <span class="p">--cream</span>:         <span class="v">#ede3cc</span>;
+  <span class="p">--gold</span>:          <span class="v">#c9973a</span>;
+  <span class="p">--gold-dim</span>:      <span class="v">#8a6525</span>;
+  <span class="p">--rust</span>:          <span class="v">#8c3a1e</span>;
+  <span class="p">--moss</span>:          <span class="v">#2e4a2e</span>;
+  <span class="p">--fog</span>:           <span class="v">#b8a88a</span>;
+  <span class="p">--fog-light</span>:     <span class="v">#d4c9b0</span>;
+  <span class="p">--border</span>:        <span class="v">rgba(201,151,58,0.25)</span>;
+  <span class="p">--border-strong</span>: <span class="v">rgba(201,151,58,0.6)</span>;
+}</pre>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      This sheet is set in system serif and monospace. The site itself uses
+      Cinzel for headings, IM Fell English for body and Space Mono for labels —
+      those aren't loaded here, so treat this as a colour reference, not a type
+      specimen.
+    </p>
+    <p>
+      Rendered dark-only on purpose: every value above is specified against a
+      near-black ground, and showing them on white would misrepresent how they
+      behave.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    const text = document.getElementById('tokens').innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Copied';
+    } catch {
+      btn.textContent = 'Press ⌘C';
+      const r = document.createRange();
+      r.selectNodeContents(document.getElementById('tokens'));
+      const s = getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+    }
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  });
+</script>
+</body>
+</html>

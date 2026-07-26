@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prints &amp; Canvas — Miles Walker</title>
+  <meta name="description" content="Fine art paper prints and gallery canvas of Miles Walker's fantasy illustration work. Made to order." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/css/glightbox.min.css" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0d0b08;
+      --ink-soft:  #1a1610;
+      --parchment: #f0e8d5;
+      --cream:     #ede3cc;
+      --gold:      #c9973a;
+      --gold-dim:  #8a6525;
+      --rust:      #8c3a1e;
+      --moss:      #2e4a2e;
+      --fog:       #b8a88a;
+      --fog-light: #d4c9b0;
+      --border:    rgba(201,151,58,0.25);
+      --border-strong: rgba(201,151,58,0.6);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── Noise texture overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.6;
+    }
+
+    /* ─── Typography ─── */
+    h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 0.08em; }
+    .display { font-family: 'Cinzel Decorative', serif; }
+    .mono { font-family: 'Space Mono', monospace; font-size: 0.78em; }
+
+    a { color: var(--gold); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--parchment); }
+
+    /* ─── Custom Cursor ─── */
+    body { cursor: none; }
+    #cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, opacity 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-trail {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 0.5px solid rgba(201,151,58,0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.15s ease, top 0.15s ease;
+    }
+
+    /* ─── Decorative HR ─── */
+    .rule {
+      display: flex; align-items: center; gap: 12px;
+      margin: 2rem 0;
+      color: var(--gold-dim);
+    }
+    .rule::before, .rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+    .rule-symbol { font-size: 1rem; opacity: 0.6; }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,11,8,0.95), transparent);
+      backdrop-filter: blur(0px);
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex; gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fog);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+
+    /* ─── Buttons ─── */
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.8rem 2rem;
+      border: 1px solid;
+      transition: all 0.25s;
+      cursor: none;
+    }
+    .btn-primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--ink);
+    }
+    .btn-primary:hover {
+      background: var(--parchment);
+      border-color: var(--parchment);
+      color: var(--ink);
+    }
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--fog);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ─── Section base ─── */
+    section { padding: 6rem 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+
+    .section-header {
+      margin-bottom: 4rem;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--cream);
+    }
+
+
+    /* ─── Shop header ─── */
+    #shop-hero {
+      padding: 11rem 0 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #shop-hero::before {
+      content: '';
+      position: absolute;
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(201,151,58,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .shop-title {
+      font-size: clamp(2.6rem, 7vw, 4.4rem);
+      line-height: 1;
+      color: var(--parchment);
+      animation: fadeUp 1s 0.2s both;
+    }
+    .shop-title .accent {
+      color: var(--gold);
+      font-style: italic;
+      display: block;
+      font-family: 'IM Fell English', serif;
+      font-size: 0.4em;
+      margin-top: 0.5rem;
+      letter-spacing: 0.15em;
+    }
+    .shop-lede {
+      margin: 2rem auto 0;
+      max-width: 560px;
+      color: var(--fog);
+      font-style: italic;
+      font-size: 1.25rem;
+      animation: fadeUp 1s 0.5s both;
+    }
+
+    /* ─── Formats (paper vs canvas) ─── */
+    #formats {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .format-card {
+      padding: 2.5rem 2rem;
+      background: var(--ink);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .format-card:hover { background: var(--ink-soft); }
+    .format-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .format-card:hover::before { transform: scaleX(1); }
+    .format-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+    .format-title {
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .format-desc {
+      color: var(--fog);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+    .format-sizes {
+      list-style: none;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .format-sizes li {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--fog);
+      opacity: 0.85;
+      padding: 0.25rem 0;
+    }
+    .format-sizes li::before {
+      content: '✦';
+      color: var(--gold-dim);
+      margin-right: 0.6rem;
+      font-size: 0.6rem;
+    }
+
+    /* ─── How ordering works ─── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+      margin-top: 1rem;
+    }
+    .step-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      opacity: 0.35;
+      line-height: 1;
+      margin-bottom: 0.9rem;
+    }
+    .step h3 {
+      font-size: 0.95rem;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.05em;
+    }
+    .step p {
+      color: var(--fog);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ─── Catalog ─── */
+    .print-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 2.5rem 1.5rem;
+    }
+    .print-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .print-thumb {
+      display: block;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--ink-soft);
+      transition: border-color 0.3s;
+      cursor: none;
+    }
+    .print-thumb:hover { border-color: var(--border-strong); }
+    .print-thumb img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: saturate(0.85) brightness(0.9);
+      transition: transform 0.5s ease, filter 0.4s;
+    }
+    .print-thumb:hover img {
+      transform: scale(1.03);
+      filter: saturate(1.05) brightness(1);
+    }
+    .print-meta { padding-top: 0.9rem; }
+    .print-title {
+      font-size: 0.9rem;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+    }
+    .print-kind {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.8rem;
+    }
+    .print-inquire {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--fog);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .print-inquire:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    /* ─── Merch (Threadless / Redbubble) ─── */
+    #merch {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+    }
+    .merch-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .merch-inner > p {
+      color: var(--fog);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+    }
+    .merch-examples {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin: 2rem 0 2.5rem;
+      line-height: 2.2;
+    }
+    .merch-shops {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .merch-shop {
+      padding: 2rem;
+      background: var(--ink);
+      transition: background 0.3s;
+    }
+    .merch-shop:hover { background: var(--ink-soft); }
+    .merch-shop h3 {
+      font-size: 1rem;
+      color: var(--cream);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.7rem;
+    }
+    .merch-shop p {
+      color: var(--fog);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    /* index.html's buttons sit in a flex row; these are loose anchors, so they
+       need inline-block for the .btn padding to reserve vertical space. */
+    .merch-shop .btn { display: inline-block; }
+
+    /* ─── Note strip ─── */
+    .note {
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold-dim);
+      padding: 1.4rem 1.8rem;
+      margin-top: 3rem;
+      color: var(--fog-light);
+      /* Space Mono, matching .format-sizes — sized up and given extra leading,
+         since monospace prose needs more room than the short size lists do. */
+      font-family: 'Space Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.9;
+      letter-spacing: 0.04em;
+      background: rgba(201,151,58,0.03);
+    }
+
+    /* ─── Contact ─── */
+    #contact {
+      background: var(--ink);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-inner .section-title {
+      margin-bottom: 1.2rem;
+    }
+    .contact-inner p {
+      color: var(--fog);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      font-size: 1.4rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .contact-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fog);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-link:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .email-display {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: var(--parchment);
+      letter-spacing: 0.06em;
+      margin-bottom: 2.5rem;
+      display: block;
+    }
+    .email-display:hover { color: var(--gold); }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--ink-soft);
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-dim);
+    }
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--fog);
+      opacity: 0.5;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.05); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-portrait { max-width: 280px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+      .gi-1, .gi-2, .gi-3, .gi-4, .gi-5,
+      .gi-6, .gi-7, .gi-8, .gi-9 {
+        grid-column: span 1; grid-row: span 1;
+      }
+      .corner { display: none; }
+      #cursor, #cursor-trail { display: none; }
+      body { cursor: default; }
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #shop-hero { padding: 8rem 0 3.5rem; }
+      .print-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+      #cursor, #cursor-trail { display: none; }
+      body { cursor: default; }
+    }
+    @media (max-width: 420px) {
+      .print-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-logo"><a href="index.html" style="color: inherit;">Miles Walker</a></div>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="shop.html" style="color: var(--gold);">Prints</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <section id="shop-hero">
+    <div class="container">
+      <h1 class="shop-title">
+        The Print Shop
+        <span class="accent">paper &amp; canvas, made to order</span>
+      </h1>
+      <p class="shop-lede">
+        Every piece in the gallery can be printed and hung on a wall.
+        Nothing sits in a warehouse — each one is made when you ask for it.
+      </p>
+    </div>
+  </section>
+
+  <!-- Formats -->
+  <section id="formats">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">The Formats</p>
+        <h2 class="section-title">Two Ways To Hang It</h2>
+      </div>
+
+      <!-- CONFIRM WITH MILES: paper stock, canvas type and the size lists below -->
+      <div class="format-grid reveal" style="transition-delay: 0.1s;">
+        <div class="format-card">
+          <div class="format-num">I</div>
+          <h3 class="format-title">Fine Art Paper</h3>
+          <p class="format-desc">
+            Heavyweight archival matte stock. Deep blacks, no glare, and the
+            texture the originals were painted for. Ships flat or rolled
+            depending on size — ready to frame however you like.
+          </p>
+          <ul class="format-sizes">
+            <li>Portrait &nbsp;— 12×16 &nbsp;·&nbsp; 18×24 &nbsp;·&nbsp; 24×32</li>
+            <li>Landscape — 16×12 &nbsp;·&nbsp; 24×18 &nbsp;·&nbsp; 32×24</li>
+            <li>Custom sizes on request</li>
+          </ul>
+        </div>
+        <div class="format-card">
+          <div class="format-num">II</div>
+          <h3 class="format-title">Gallery Canvas</h3>
+          <p class="format-desc">
+            Stretched over a wooden frame with wrapped edges, arriving ready to
+            hang straight out of the box. The heavier weave suits the big
+            atmospheric pieces — the drakes, the cityscapes, the wide ones.
+          </p>
+          <ul class="format-sizes">
+            <li>Portrait &nbsp;— 12×16 &nbsp;·&nbsp; 18×24 &nbsp;·&nbsp; 24×32</li>
+            <li>Landscape — 16×12 &nbsp;·&nbsp; 24×18 &nbsp;·&nbsp; 32×24</li>
+            <li>Custom sizes on request</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note reveal">
+        Pricing depends on format, size and where it's going, so it's quoted per
+        order rather than listed here. Send a note with the piece and size you
+        have in mind and you'll get a number back — no obligation.
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">How It Works</p>
+        <h2 class="section-title">Three Steps</h2>
+      </div>
+
+      <div class="steps reveal" style="transition-delay: 0.1s;">
+        <div class="step">
+          <div class="step-num">I</div>
+          <h3>Pick The Piece</h3>
+          <p>
+            Find it in the catalog below and hit <em>request this print</em>.
+            That opens an email with the title already filled in — just add the
+            format and size.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-num">II</div>
+          <h3>Get A Quote</h3>
+          <p>
+            You'll get a reply with pricing, turnaround and shipping for exactly
+            what you asked for. Ask about framing, odd sizes or a piece that
+            isn't listed — the answer is usually yes.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-num">III</div>
+          <h3>It Gets Made</h3>
+          <p>
+            Once it's settled, the print is produced and shipped to you.
+            Every print is made to order, so nothing is mass-run and nothing
+            sits in inventory.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog -->
+  <section id="catalog" style="background: var(--ink-soft); border-top: 1px solid var(--border);">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">The Catalog</p>
+        <h2 class="section-title">Available As Prints</h2>
+      </div>
+
+      <div class="print-grid reveal" style="transition-delay: 0.1s;">
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Foundry_Drake.webp" data-lg-size="2000-1515">
+            <img src="Images/thumbs/Foundry_Drake.webp" alt="Foundry Drake"
+                 width="800" height="606" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Foundry Drake</h3>
+            <p class="print-kind">Creature Design &middot; Landscape</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Foundry%20Drake&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Foundry%20Drake%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Kaiju_Picnic.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Kaiju_Picnic.webp" alt="Kaiju Picnic"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Kaiju Picnic</h3>
+            <p class="print-kind">Environment &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Kaiju%20Picnic&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Kaiju%20Picnic%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Croc_Tank.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Croc_Tank.webp" alt="Croc Tank"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Croc Tank</h3>
+            <p class="print-kind">Urban Fantasy &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Croc%20Tank&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Croc%20Tank%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Handmade_Potions.webp" data-lg-size="2000-1515">
+            <img src="Images/thumbs/Handmade_Potions.webp" alt="Handmade Potions"
+                 width="800" height="606" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Handmade Potions</h3>
+            <p class="print-kind">Atmospheric &middot; Landscape</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Handmade%20Potions&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Handmade%20Potions%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Fishing_For_Trouble_.webp" data-lg-size="2000-1515">
+            <img src="Images/thumbs/Fishing_For_Trouble_.webp" alt="Fishing for Trouble"
+                 width="800" height="606" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Fishing for Trouble</h3>
+            <p class="print-kind">Environment &middot; Landscape</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Fishing%20for%20Trouble&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Fishing%20for%20Trouble%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Commuters.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Commuters.webp" alt="Commuters"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Commuters</h3>
+            <p class="print-kind">Urban Fantasy &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Commuters&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Commuters%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Chicken_Ranch.webp" data-lg-size="1500-2000">
+            <img src="Images/thumbs/Chicken_Ranch.webp" alt="Chicken Ranch"
+                 width="800" height="1067" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Chicken Ranch</h3>
+            <p class="print-kind">Texas Gothic &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Chicken%20Ranch&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Chicken%20Ranch%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Gladys.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Gladys.webp" alt="Gladys"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Gladys</h3>
+            <p class="print-kind">Character &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Gladys&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Gladys%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Grease_Mill.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Grease_Mill.webp" alt="Grease Mill"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Grease Mill</h3>
+            <p class="print-kind">Environment &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Grease%20Mill&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Grease%20Mill%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Growth.webp" data-lg-size="2000-1515">
+            <img src="Images/thumbs/Growth.webp" alt="Growth"
+                 width="800" height="606" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Growth</h3>
+            <p class="print-kind">Creature Design &middot; Landscape</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Growth&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Growth%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Down_Time.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Down_Time.webp" alt="Down Time"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Down Time</h3>
+            <p class="print-kind">Character &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Down%20Time&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Down%20Time%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Seasonal.webp" data-lg-size="1515-2000">
+            <img src="Images/thumbs/Seasonal.webp" alt="Seasonal"
+                 width="800" height="1056" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Seasonal</h3>
+            <p class="print-kind">Atmospheric &middot; Portrait</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Seasonal&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Seasonal%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+        <article class="print-card">
+          <a class="glightbox print-thumb" href="Images/Wildlife.webp" data-lg-size="2000-1515">
+            <img src="Images/thumbs/Wildlife.webp" alt="Wildlife"
+                 width="800" height="606" loading="lazy" decoding="async" />
+          </a>
+          <div class="print-meta">
+            <h3 class="print-title">Wildlife</h3>
+            <p class="print-kind">Creature Design &middot; Landscape</p>
+            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Wildlife&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Wildlife%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Merch -->
+  <section id="merch">
+    <div class="container">
+      <div class="merch-inner reveal">
+        <div class="section-header">
+          <p class="section-label">Everything Else</p>
+          <h2 class="section-title">Stickers, Shirts &amp; Small Things</h2>
+        </div>
+
+        <p>
+          The print shop is for paper and canvas — the big, framed,
+          hang-it-on-the-wall things. For everything you'd rather wear, carry,
+          or stick on a laptop lid, the art lives on two print-on-demand shops
+          that handle the printing and shipping directly.
+        </p>
+
+        <p class="merch-examples">
+          Stickers &nbsp;·&nbsp; T-shirts &nbsp;·&nbsp; Hoodies &nbsp;·&nbsp; Notebooks<br />
+          Mugs &nbsp;·&nbsp; Tote bags &nbsp;·&nbsp; Phone cases &nbsp;·&nbsp; Pins
+        </p>
+
+        <div class="merch-shops">
+          <div class="merch-shop">
+            <h3>Threadless</h3>
+            <p>
+              Apparel first — tees, hoodies and everyday wearables, with a
+              rotating slice of the catalog available on each.
+            </p>
+            <a href="https://miles2walk.threadless.com/" class="btn btn-ghost" target="_blank" rel="noopener">Visit The Shop</a>
+          </div>
+          <div class="merch-shop">
+            <h3>Redbubble</h3>
+            <p>
+              The wide net — stickers, notebooks, mugs, cases and the rest of
+              the odds and ends, printed on demand and shipped worldwide.
+            </p>
+            <a href="https://www.redbubble.com/people/Miles2Walk/shop" class="btn btn-ghost" target="_blank" rel="noopener">Visit The Shop</a>
+          </div>
+        </div>
+
+        <div class="note" style="text-align: left;">
+          Those two shops are run by their own platforms, so orders, shipping and
+          returns are handled on their end. Anything on paper or canvas comes
+          straight from the studio — that's this page.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <div class="section-header">
+          <p class="section-label">Questions</p>
+          <h2 class="section-title">Just Ask</h2>
+        </div>
+
+        <p>
+          Not sure which size fits the wall, want a piece that isn't listed,
+          or after something framed? Drop a line.
+        </p>
+
+        <a href="mailto:mileswalkerart@gmail.com?subject=Print%20shop%20question" class="email-display">mileswalkerart@gmail.com</a>
+
+        <div class="contact-links">
+          <a href="https://www.instagram.com/miles.2w" class="contact-link" target="_blank" rel="noopener">Instagram</a>
+          <a href="index.html#work" class="contact-link">The Gallery</a>
+          <a href="index.html#services" class="contact-link">Commissions</a>
+        </div>
+
+        <div class="rule"><span class="rule-symbol">✦</span></div>
+
+        <p class="mono" style="color: var(--gold-dim); font-size: 0.65rem; letter-spacing: 0.2em;">
+          BASED IN SAN ANTONIO, TEXAS &nbsp;·&nbsp; AVAILABLE WORLDWIDE
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand"><a href="index.html" style="color: inherit;">Miles Walker</a></div>
+    <div class="footer-copy">© 2026 Miles Walker. All rights reserved.</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/js/glightbox.min.js"></script>
+  <script>
+    // ─── GLightbox init ───
+    const lightbox = GLightbox({
+      selector: '.glightbox',
+      touchNavigation: true,
+      loop: true,
+      effect: 'fade',
+    });
+
+    // ─── Custom cursor ───
+    const cursor = document.getElementById('cursor');
+    const trail  = document.getElementById('cursor-trail');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      trail.style.left  = e.clientX + 'px';
+      trail.style.top   = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .format-card, .merch-shop, .btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+        cursor.style.borderColor = 'var(--parchment)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursor.style.borderColor = 'var(--gold)';
+      });
+    });
+
+    // ─── Scroll reveal ───
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
