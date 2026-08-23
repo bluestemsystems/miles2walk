@@ -58,124 +58,19 @@
       animation: fadeUp 1s 0.5s both;
     }
 
-    /* ─── Formats (paper vs canvas) ─── */
-
-    #formats {
-      background: var(--ink-soft);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .format-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1px;
-      border: 1px solid var(--border);
-    }
-
-    .format-card {
-      padding: 2.5rem 2rem;
-      background: var(--ink);
-      position: relative;
-      transition: background 0.3s;
-    }
-
-    .format-card:hover {
-      background: var(--ink-soft);
-    }
-
-    .format-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s ease;
-    }
-
-    .format-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .format-num {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2rem;
-      color: var(--gold);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 1.2rem;
-    }
-
-    .format-title {
-      font-size: 1rem;
-      color: var(--cream);
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.05em;
-    }
-
-    .format-desc {
-      color: var(--fog);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1.4rem;
-    }
-
-    .format-sizes {
-      list-style: none;
-      border-top: 1px solid var(--border);
-      padding-top: 1rem;
-    }
-
-    .format-sizes li {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      color: var(--fog);
-      opacity: 0.85;
-      padding: 0.25rem 0;
-    }
-
-    .format-sizes li::before {
-      content: '✦';
-      color: var(--gold-dim);
-      margin-right: 0.6rem;
-      font-size: 0.6rem;
-    }
-
-    /* ─── How ordering works ─── */
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2.5rem;
-      margin-top: 1rem;
-    }
-
-    .step-num {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 1.6rem;
-      color: var(--gold);
-      opacity: 0.35;
-      line-height: 1;
-      margin-bottom: 0.9rem;
-    }
-
-    .step h3 {
-      font-size: 0.95rem;
-      color: var(--cream);
-      margin-bottom: 0.6rem;
-      letter-spacing: 0.05em;
-    }
-
-    .step p {
-      color: var(--fog);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
     /* ─── Catalog ─── */
+
+    /* Matches the merch section intro: same centred measure, colour and
+       size. The 4rem bottom margin is what .section-header used to carry,
+       so the gap before the print grid is unchanged. */
+    .catalog-lede {
+      max-width: 760px;
+      margin: 0 auto 4rem;
+      text-align: center;
+      color: var(--fog);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
 
     .print-grid {
       display: grid;
@@ -234,20 +129,229 @@
       margin-bottom: 0.8rem;
     }
 
-    .print-inquire {
+    .print-buy {
       font-family: 'Space Mono', monospace;
       font-size: 0.62rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--fog);
+      background: none;
+      border: 0;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 2px;
+      padding: 0 0 2px;
+      cursor: pointer;
       transition: color 0.2s, border-color 0.2s;
     }
 
-    .print-inquire:hover {
+    .print-buy:hover,
+    .print-buy:focus-visible {
       color: var(--gold);
       border-color: var(--gold);
+    }
+
+    /* ─── Buy dialog ─── */
+
+    /* MUST stay `fixed`. A top-layer element forces `relative` to compute as
+       `absolute`, which positions the dialog against the document instead of
+       the viewport — it then lands near the top of the page and focusing the
+       close button scrolls the whole page up to meet it. `fixed` also anchors
+       .buy-close, which is why `relative` was here in the first place. */
+    .buy-dialog {
+      width: min(680px, calc(100vw - 2rem));
+      padding: 0;
+      border: 1px solid var(--border-strong);
+      background: var(--ink-soft);
+      color: var(--parchment);
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+
+    .buy-dialog::backdrop {
+      background: rgba(5,4,3,0.78);
+    }
+
+    .buy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.6rem;
+      padding: 1.6rem;
+    }
+
+    .buy-figure {
+      margin: 0;
+      align-self: start;
+      border: 1px solid var(--border);
+      background: var(--ink);
+    }
+
+    .buy-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .buy-close {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.7rem;
+      background: none;
+      border: 0;
+      color: var(--fog);
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .buy-close:hover { color: var(--gold); }
+
+    .buy-title {
+      font-size: 1.05rem;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.15rem;
+    }
+
+    .buy-kind {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1.1rem;
+    }
+
+    .buy-field { margin-bottom: 0.9rem; }
+
+    .buy-label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.35rem;
+    }
+
+    .buy-select {
+      width: 100%;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--parchment);
+      background: var(--ink);
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.6rem;
+      cursor: pointer;
+    }
+
+    .buy-select:focus-visible {
+      outline: 1px solid var(--gold);
+      outline-offset: 1px;
+    }
+
+    .buy-blurb {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--fog);
+      margin: 0.9rem 0 0.8rem;
+      min-height: 3.9em;
+    }
+
+    .buy-sizes {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--fog);
+      line-height: 1.95;
+      margin-bottom: 1rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .buy-sizes b {
+      color: var(--cream);
+      font-weight: normal;
+    }
+
+    /* A dialog opened with showModal() paints in the browser's top layer,
+       above every z-index — so the custom #cursor can never appear over it,
+       and body's `cursor: none` leaves nothing at all. Hand the native cursor
+       back for as long as the dialog is open, and park the custom one. */
+    .modal-open body {
+      cursor: auto;
+    }
+
+    .modal-open #cursor,
+    .modal-open #cursor-trail {
+      opacity: 0;
+    }
+
+
+    .buy-price {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 1.7rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .buy-ship {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin: 0.4rem 0 1.1rem;
+    }
+
+    .buy-go {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .buy-go:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .buy-go[aria-disabled="true"] {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .buy-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: var(--fog);
+      opacity: 0.75;
+      text-align: center;
+      margin-top: 0.65rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 620px) {
+      .buy-grid {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+      }
+      .buy-figure { max-width: 260px; }
     }
 
     /* ─── Merch (Threadless / Redbubble) ─── */
@@ -390,101 +494,14 @@
     </div>
   </section>
 
-  <!-- Formats -->
-  <section id="formats">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-label">The Formats</p>
-        <h2 class="section-title">Two Ways To Hang It</h2>
-      </div>
-
-      <!-- CONFIRM WITH MILES: paper stock, canvas type and the size lists below -->
-      <div class="format-grid reveal" style="transition-delay: 0.1s;">
-        <div class="format-card">
-          <div class="format-num">I</div>
-          <h3 class="format-title">Fine Art Paper</h3>
-          <p class="format-desc">
-            Heavyweight archival matte stock. Deep blacks, no glare, and the
-            texture the originals were painted for. Ships flat or rolled
-            depending on size — ready to frame however you like.
-          </p>
-          <ul class="format-sizes">
-            <li>Portrait &nbsp;— 12×16 &nbsp;·&nbsp; 18×24 &nbsp;·&nbsp; 24×32</li>
-            <li>Landscape — 16×12 &nbsp;·&nbsp; 24×18 &nbsp;·&nbsp; 32×24</li>
-            <li>Custom sizes on request</li>
-          </ul>
-        </div>
-        <div class="format-card">
-          <div class="format-num">II</div>
-          <h3 class="format-title">Gallery Canvas</h3>
-          <p class="format-desc">
-            Stretched over a wooden frame with wrapped edges, arriving ready to
-            hang straight out of the box. The heavier weave suits the big
-            atmospheric pieces — the drakes, the cityscapes, the wide ones.
-          </p>
-          <ul class="format-sizes">
-            <li>Portrait &nbsp;— 12×16 &nbsp;·&nbsp; 18×24 &nbsp;·&nbsp; 24×32</li>
-            <li>Landscape — 16×12 &nbsp;·&nbsp; 24×18 &nbsp;·&nbsp; 32×24</li>
-            <li>Custom sizes on request</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="note reveal">
-        Pricing depends on format, size and where it's going, so it's quoted per
-        order rather than listed here. Send a note with the piece and size you
-        have in mind and you'll get a number back — no obligation.
-      </div>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section id="how">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-label">How It Works</p>
-        <h2 class="section-title">Three Steps</h2>
-      </div>
-
-      <div class="steps reveal" style="transition-delay: 0.1s;">
-        <div class="step">
-          <div class="step-num">I</div>
-          <h3>Pick The Piece</h3>
-          <p>
-            Find it in the catalog below and hit <em>request this print</em>.
-            That opens an email with the title already filled in — just add the
-            format and size.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-num">II</div>
-          <h3>Get A Quote</h3>
-          <p>
-            You'll get a reply with pricing, turnaround and shipping for exactly
-            what you asked for. Ask about framing, odd sizes or a piece that
-            isn't listed — the answer is usually yes.
-          </p>
-        </div>
-        <div class="step">
-          <div class="step-num">III</div>
-          <h3>It Gets Made</h3>
-          <p>
-            Once it's settled, the print is produced and shipped to you.
-            Every print is made to order, so nothing is mass-run and nothing
-            sits in inventory.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Catalog -->
   <section id="catalog" style="background: var(--ink-soft); border-top: 1px solid var(--border);">
     <div class="container">
-      <div class="section-header reveal">
-        <p class="section-label">The Catalog</p>
-        <h2 class="section-title">Available As Prints</h2>
-      </div>
+      <p class="catalog-lede reveal">
+        Paper, canvas, framed or metal — pick a piece and you'll see every
+        format and price. Shipping within the US is included. For a custom
+        size, or a piece that isn't listed, send a note.
+      </p>
 
       <div class="print-grid reveal" style="transition-delay: 0.1s;">
         <article class="print-card">
@@ -495,7 +512,7 @@
           <div class="print-meta">
             <h3 class="print-title">Foundry Drake</h3>
             <p class="print-kind">Creature Design &middot; Landscape</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Foundry%20Drake&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Foundry%20Drake%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="foundry-drake">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -506,7 +523,7 @@
           <div class="print-meta">
             <h3 class="print-title">Kaiju Picnic</h3>
             <p class="print-kind">Environment &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Kaiju%20Picnic&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Kaiju%20Picnic%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="kaiju-picnic">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -517,7 +534,7 @@
           <div class="print-meta">
             <h3 class="print-title">Croc Tank</h3>
             <p class="print-kind">Urban Fantasy &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Croc%20Tank&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Croc%20Tank%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="croc-tank">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -528,7 +545,7 @@
           <div class="print-meta">
             <h3 class="print-title">Handmade Potions</h3>
             <p class="print-kind">Atmospheric &middot; Landscape</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Handmade%20Potions&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Handmade%20Potions%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="handmade-potions">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -539,7 +556,7 @@
           <div class="print-meta">
             <h3 class="print-title">Fishing for Trouble</h3>
             <p class="print-kind">Environment &middot; Landscape</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Fishing%20for%20Trouble&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Fishing%20for%20Trouble%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="fishing-for-trouble">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -550,7 +567,7 @@
           <div class="print-meta">
             <h3 class="print-title">Commuters</h3>
             <p class="print-kind">Urban Fantasy &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Commuters&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Commuters%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="commuters">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -561,7 +578,7 @@
           <div class="print-meta">
             <h3 class="print-title">Chicken Ranch</h3>
             <p class="print-kind">Texas Gothic &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Chicken%20Ranch&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Chicken%20Ranch%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="chicken-ranch">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -572,7 +589,7 @@
           <div class="print-meta">
             <h3 class="print-title">Gladys</h3>
             <p class="print-kind">Character &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Gladys&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Gladys%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="gladys">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -583,7 +600,7 @@
           <div class="print-meta">
             <h3 class="print-title">Grease Mill</h3>
             <p class="print-kind">Environment &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Grease%20Mill&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Grease%20Mill%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="grease-mill">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -594,18 +611,18 @@
           <div class="print-meta">
             <h3 class="print-title">Growth</h3>
             <p class="print-kind">Creature Design &middot; Landscape</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Growth&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Growth%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="growth">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
           <a class="glightbox print-thumb" href="Images/Down_Time.webp" data-lg-size="1515-2000">
-            <img src="Images/thumbs/Down_Time.webp" alt="Down Time"
+            <img src="Images/thumbs/Down_Time.webp" alt="Downtime"
                  width="800" height="1056" loading="lazy" decoding="async" />
           </a>
           <div class="print-meta">
-            <h3 class="print-title">Down Time</h3>
+            <h3 class="print-title">Downtime</h3>
             <p class="print-kind">Character &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Down%20Time&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Down%20Time%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="downtime">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -616,7 +633,7 @@
           <div class="print-meta">
             <h3 class="print-title">Seasonal</h3>
             <p class="print-kind">Atmospheric &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Seasonal&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Seasonal%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="seasonal">Buy this print</button>
           </div>
         </article>
         <article class="print-card">
@@ -627,7 +644,7 @@
           <div class="print-meta">
             <h3 class="print-title">Wildlife</h3>
             <p class="print-kind">Creature Design &middot; Landscape</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Wildlife&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Wildlife%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="wildlife">Buy this print</button>
           </div>
         </article>
 
@@ -639,7 +656,7 @@
           <div class="print-meta">
             <h3 class="print-title">Naegelin's Bakery</h3>
             <p class="print-kind">Environment &middot; Portrait</p>
-            <a class="print-inquire" href="mailto:mileswalkerart@gmail.com?subject=Print%20inquiry%3A%20Naegelin%27s%20Bakery&amp;body=Hi%20Miles%2C%0A%0AI%27d%20like%20to%20order%20a%20print%20of%20%22Naegelin%27s%20Bakery%22.%0A%0APaper%20or%20canvas%3A%0ASize%3A%0AFraming%3A%0AShipping%20to%3A%0A%0AThanks%21%0A">Request this print</a>
+            <button class="print-buy" type="button" data-art="naegelins-bakery">Buy this print</button>
           </div>
         </article>
       </div>
@@ -737,6 +754,36 @@
     <div class="footer-copy">© 2026 Miles Walker. All rights reserved.</div>
   </footer>
 
+  <!-- Buy dialog (populated by the script at the foot of this page) -->
+  <dialog id="buy-dialog" class="buy-dialog" aria-labelledby="buy-dialog-title">
+    <button type="button" class="buy-close" aria-label="Close">&times;</button>
+    <div class="buy-grid">
+      <figure class="buy-figure">
+        <img src="" alt="" />
+      </figure>
+      <div>
+        <h3 class="buy-title" id="buy-dialog-title"></h3>
+        <p class="buy-kind"></p>
+
+        <div class="buy-field">
+          <label class="buy-label" for="buy-format">Format</label>
+          <select class="buy-select" id="buy-format"></select>
+        </div>
+
+        <p class="buy-blurb"></p>
+
+        <p class="buy-sizes"></p>
+
+        <p class="buy-price"></p>
+        <p class="buy-ship">Free shipping &middot; made to order</p>
+
+        <a class="buy-go" href="" target="_blank" rel="noopener">Buy this print &rarr;</a>
+        <p class="buy-note">Choose your size at checkout, on the Miles2Walk store.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="shop-data.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.3.0/js/glightbox.min.js"></script>
   <script>
     // ─── GLightbox init ───
@@ -756,7 +803,7 @@
       trail.style.left  = e.clientX + 'px';
       trail.style.top   = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .format-card, .merch-shop, .btn').forEach(el => {
+    document.querySelectorAll('a, button, .merch-shop, .btn').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.transform = 'translate(-50%, -50%) scale(2)';
         cursor.style.borderColor = 'var(--parchment)';
@@ -775,6 +822,99 @@
       });
     }, { threshold: 0.12 });
     reveals.forEach(el => observer.observe(el));
+
+    // ─── Buy dialog ───
+    // Data (formats, prices, per-artwork Square product URLs) lives in
+    // shop-data.js, which is GENERATED by tools/build-shop-data.py from the
+    // live Square sitemap. Don't hand-edit it — re-run the script instead.
+    (function () {
+      const DATA = window.PRINT_SHOP;
+      const dlg = document.getElementById('buy-dialog');
+      if (!DATA || !dlg) return;
+
+      const elTitle  = dlg.querySelector('.buy-title');
+      const elKind   = dlg.querySelector('.buy-kind');
+      const elImg    = dlg.querySelector('.buy-figure img');
+      const selFmt   = dlg.querySelector('#buy-format');
+      const elBlurb  = dlg.querySelector('.buy-blurb');
+      const elSizes  = dlg.querySelector('.buy-sizes');
+      const elPrice  = dlg.querySelector('.buy-price');
+      const elGo     = dlg.querySelector('.buy-go');
+      let art = null;
+
+      const fmtById = id => DATA.formats.find(f => f.key === id);
+
+      // Size is chosen on the Square product page, not here — this dialog only
+      // picks the format. The sizes are still listed so the price is visible
+      // before anyone leaves the site.
+      function render() {
+        const f = fmtById(selFmt.value);
+        const url = art.products[f.key];
+        elBlurb.textContent = f.blurb;
+        elSizes.innerHTML = f.sizes
+          .map(s => `${s.size.replace('x', '×')} in <b>$${s.price}</b>`)
+          .join(' &nbsp;·&nbsp; ');
+        elPrice.textContent = `from $${Math.min(...f.sizes.map(s => s.price))}`;
+        elImg.src = (art.mockups && art.mockups[f.key]) || art.thumb;
+        elImg.alt = `${art.title} — ${f.label}`;
+        if (url) {
+          elGo.href = url;
+          elGo.removeAttribute('aria-disabled');
+          elGo.textContent = 'Buy this print →';
+        } else {
+          elGo.removeAttribute('href');
+          elGo.setAttribute('aria-disabled', 'true');
+          elGo.textContent = 'Not available';
+        }
+      }
+
+      function open(slug) {
+        art = DATA.art[slug];
+        if (!art) return;
+        elTitle.textContent = art.title;
+        elKind.textContent = art.kind || '';
+        selFmt.innerHTML = '';
+        DATA.formats.forEach(f => {
+          if (!art.products[f.key]) return;   // skip formats with no live listing
+          const o = document.createElement('option');
+          o.value = f.key;
+          o.textContent = `${f.label} — from $${Math.min(...f.sizes.map(s => s.price))}`;
+          selFmt.appendChild(o);
+        });
+        if (!selFmt.options.length) return;
+        render();
+        document.documentElement.classList.add('modal-open');
+        dlg.showModal();
+      }
+
+      function close() {
+        dlg.close();
+      }
+
+      // Covers Esc and form-dismissal too, not just our own close button.
+      dlg.addEventListener('close', () => {
+        document.documentElement.classList.remove('modal-open');
+      });
+
+      document.querySelectorAll('.print-buy').forEach(btn => {
+        const a = DATA.art[btn.dataset.art];
+        // No priced listing in Square yet — fall back to email rather than
+        // leaving a button that does nothing when clicked.
+        if (!a || !Object.keys(a.products).length) {
+          const mail = document.createElement('a');
+          mail.className = 'print-buy';
+          mail.textContent = 'Ask about this print';
+          mail.href = 'mailto:mileswalkerart@gmail.com?subject=' +
+            encodeURIComponent('Print inquiry: ' + (a ? a.title : btn.dataset.art));
+          btn.replaceWith(mail);
+          return;
+        }
+        btn.addEventListener('click', () => open(btn.dataset.art));
+      });
+      selFmt.addEventListener('change', render);
+      dlg.querySelector('.buy-close').addEventListener('click', close);
+      dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
+    })();
   </script>
 </body>
 </html>
